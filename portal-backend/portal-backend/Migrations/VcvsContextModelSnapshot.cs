@@ -17,7 +17,7 @@ namespace portal_backend.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.11")
+                .HasAnnotation("ProductVersion", "7.0.17")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -184,16 +184,16 @@ namespace portal_backend.Migrations
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("Date")
+                    b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("OrderNumber")
                         .HasColumnType("int");
 
-                    b.Property<int?>("OrderStatus")
+                    b.Property<int>("OrderStatus")
                         .HasColumnType("int");
 
-                    b.Property<int?>("PaymentType")
+                    b.Property<int>("PaymentType")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -302,6 +302,21 @@ namespace portal_backend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ServiceCategory");
+                });
+
+            modelBuilder.Entity("portal_backend.Entities.ServiceServiceCategory", b =>
+                {
+                    b.Property<int>("ServiceId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ServiceCategoryId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ServiceId", "ServiceCategoryId");
+
+                    b.HasIndex("ServiceCategoryId");
+
+                    b.ToTable("ServiceServiceCategories");
                 });
 
             modelBuilder.Entity("portal_backend.Entities.Specialist", b =>
@@ -484,6 +499,25 @@ namespace portal_backend.Migrations
                         .IsRequired();
 
                     b.Navigation("Specialist");
+                });
+
+            modelBuilder.Entity("portal_backend.Entities.ServiceServiceCategory", b =>
+                {
+                    b.HasOne("portal_backend.Entities.ServiceCategory", "ServiceCategory")
+                        .WithMany()
+                        .HasForeignKey("ServiceCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("portal_backend.Entities.Service", "Service")
+                        .WithMany()
+                        .HasForeignKey("ServiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Service");
+
+                    b.Navigation("ServiceCategory");
                 });
 
             modelBuilder.Entity("portal_backend.Entities.Specialist", b =>
