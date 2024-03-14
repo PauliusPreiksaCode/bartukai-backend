@@ -1,4 +1,6 @@
-﻿namespace portal_backend;
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace portal_backend;
 
 public class Startup
 {
@@ -11,6 +13,9 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
+        services.AddDbContext<VcvsContext>(options =>
+            options.UseSqlServer(_configuration["SqlServer:ConnectionString"]));
+        
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
         
@@ -34,6 +39,11 @@ public class Startup
         app.UseRouting();
         app.UseHttpsRedirection();
         app.UseStaticFiles();
+        
+        using (var scope = app.ApplicationServices.GetService<IServiceScopeFactory>()!.CreateScope())
+        {
+            scope.ServiceProvider.GetRequiredService<VcvsContext>().Database.Migrate();
+        }
         
         app.UseCors(options =>
             options.SetIsOriginAllowed(_ => true)
