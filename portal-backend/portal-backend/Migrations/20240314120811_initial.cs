@@ -114,8 +114,6 @@ namespace portal_backend.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     LastLogin = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastOrderedService = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsBlocked = table.Column<bool>(type: "bit", nullable: false),
-                    BanReason = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LoyaltyGroup = table.Column<int>(type: "int", nullable: true),
                     UserId = table.Column<int>(type: "int", nullable: false)
                 },
