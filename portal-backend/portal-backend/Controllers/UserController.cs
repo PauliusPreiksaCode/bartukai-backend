@@ -4,6 +4,7 @@ using portal_backend.Enums;
 using portal_backend.Helpers;
 using portal_backend.Mediator.Commands;
 using portal_backend.Mediator.Queries;
+using portal_backend.Models;
 
 namespace portal_backend.Controllers;
 
@@ -73,8 +74,25 @@ public class UserController : BaseController
     {
         try
         {
-            var result = await Mediator.Send(query);
-
+            var accountType = User.GetAccountType();
+            var result = new List<ServiceModel>();
+            
+            if (!accountType.Equals(AccountType.Specialist))
+            {
+                result = await Mediator.Send(query);
+            }
+            else
+            {
+                result = await Mediator.Send(new GetSpecialistServicesQuery()
+                {
+                    UserId = User.GetUserId(),
+                    StringSearch = query.StringSearch,
+                    PriceFrom = query.PriceFrom,
+                    PriceTo = query.PriceTo,
+                    ServiceCategoriesIds = new List<int>(query.ServiceCategoriesIds ?? new List<int>())
+                });
+            }
+            
             return Ok(result);
         }
         catch (Exception e)
@@ -109,7 +127,7 @@ public class UserController : BaseController
     [HttpGet]
     [Route("service/unused-times/{id}")]
     [Authorize]
-    public async Task<IActionResult> AddServiceCategory(int id)
+    public async Task<IActionResult> GetUnusedServiceTimes(int id)
     {
         try
         {

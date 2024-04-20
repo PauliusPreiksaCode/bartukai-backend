@@ -71,41 +71,7 @@ public class SpecialistController : BaseController
             }; 
         }
     }
-    
-    [HttpPost]
-    [Authorize]
-    [Route("service/my-list")]
-    public async Task<IActionResult> GetAllServicesListForSpecialist(GetServicesQuery query)
-    {
-        try
-        {
-            var accountType = User.GetAccountType();
 
-            if (!accountType.Equals(AccountType.Specialist))
-            {
-                return new ForbidResult();
-            }
-
-            var result = await Mediator.Send(new GetSpecialistServicesQuery()
-            {
-                UserId = User.GetUserId(),
-                StringSearch = query.StringSearch,
-                PriceFrom = query.PriceFrom,
-                PriceTo = query.PriceTo,
-                ServiceCategoriesIds = new List<int>(query.ServiceCategoriesIds ?? new List<int>())
-            });
-
-            return Ok(result);
-        }
-        catch (Exception e)
-        {
-            return e.Message switch
-            {
-                _ => StatusCode(500, "Pabandykite vėliau")
-            };
-        }
-    }
-    
     [HttpPost]
     [Authorize]
     [Route("service")]
