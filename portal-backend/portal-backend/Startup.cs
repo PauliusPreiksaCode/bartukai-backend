@@ -80,6 +80,8 @@ public class Startup
         services.AddScoped<BlobService>();
         services.AddScoped<ImageService>();
         services.AddTransient<EmailService>();
+        services.AddScoped<TimeReservationService>();
+        services.AddScoped<ServiceService>();
         
         services.AddCors(options =>
         {
