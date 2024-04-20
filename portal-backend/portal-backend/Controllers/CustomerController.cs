@@ -12,11 +12,11 @@ using portal_backend.Models;
 
 namespace portal_backend.Controllers;
 
-public class ClientController : BaseController
+public class CustomerController : BaseController
 {
     private readonly IConfiguration _config;
 
-    public ClientController(IConfiguration config)
+    public CustomerController(IConfiguration config)
     {
         _config = config;
     }
