@@ -245,4 +245,59 @@ public class AdministratorController : BaseController
             }; 
         }
     }
+    
+    [HttpPost]
+    [Route("service/approve")]
+    [Authorize]
+    public async Task<IActionResult> ApproveService(ApproveServiceCommand command)
+    {
+        try
+        {
+            var accountType = User.GetAccountType();
+
+            if (!accountType.Equals(AccountType.Admin))
+            {
+                return new ForbidResult();
+            }
+        
+            await Mediator.Send(command);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return e.Message switch
+            {
+                "Service doesn't exist" => NotFound("Paslauga neegzistuoja"),
+                _ => StatusCode(500, "Pabandykite vėliau")
+            };
+        }
+    }
+    
+    [HttpGet]
+    [Authorize]
+    [Route("order/list")]
+    public async Task<IActionResult> GetAllOrdersList()
+    {
+        try
+        {
+            var accountType = User.GetAccountType();
+
+            if (!accountType.Equals(AccountType.Admin))
+            {
+                return new ForbidResult();
+            }
+        
+            var result = await Mediator.Send(new GetAllOrdersListQuery());
+
+            return Ok(result);
+        }
+        catch (Exception e)
+        {
+            return e.Message switch
+            {
+                _ => StatusCode(500, "Pabandykite vėliau")
+            };
+        }
+    }
+    
 }
