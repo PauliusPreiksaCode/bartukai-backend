@@ -217,6 +217,46 @@ public class UserController : BaseController
             };
         }
     }
+    
+    [Authorize]
+    [HttpPut]
+    [Route("user")]
+    public async Task<IActionResult> EditUser([FromForm] EditUserCommand command)
+    {
+        try
+        {
+            await Mediator.Send(command);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return e.Message switch
+            {
+                _ => StatusCode(500, "Pabandykite vėliau")
+            };
+        }
+    }
+    
+    [Authorize]
+    [HttpDelete]
+    [Route("user/{id}")]
+    public async Task<IActionResult> DeleteUser(int id)
+    {
+        try
+        {
+            var command = new DeleteUserCommand { Id = id };
+            await Mediator.Send(command);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return e.Message switch
+            {
+                "User not found" => NotFound("Naudotojas neegzistuoja"),
+                _ => StatusCode(500, "Pabandykite vėliau")
+            };
+        }
+    }
 
     [HttpGet]
     [Authorize]
@@ -281,6 +321,8 @@ public class UserController : BaseController
         return new JwtSecurityTokenHandler().WriteToken(token);
 
     }
+    
+    
     
     
 }
