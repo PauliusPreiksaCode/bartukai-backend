@@ -9,20 +9,20 @@ using portal_backend.Services;
 
 namespace portal_backend.Mediator.Handlers;
 
-public class UpdateServiceCommandHandler : IRequestHandler<UpdateServiceCommand>
+public class EditServiceCommandHandler : IRequestHandler<EditServiceCommand>
 {
     private readonly VcvsContext _vcvsContext;
     private readonly ServiceService _serviceService;
     private readonly TimeReservationService _timeReservationService;
 
-    public UpdateServiceCommandHandler(VcvsContext vcvsContext, ServiceService serviceService, TimeReservationService timeReservationService)
+    public EditServiceCommandHandler(VcvsContext vcvsContext, ServiceService serviceService, TimeReservationService timeReservationService)
     {
         _vcvsContext = vcvsContext;
         _serviceService = serviceService;
         _timeReservationService = timeReservationService;
     }
 
-    public async Task Handle(UpdateServiceCommand request, CancellationToken cancellationToken)
+    public async Task Handle(EditServiceCommand request, CancellationToken cancellationToken)
     {
         var specialist = _vcvsContext.Specialist.FirstOrDefault(x => x.User.Id == request.UserId);
         if (specialist == null) throw new Exception("Specialist doesn't exist");
@@ -167,7 +167,7 @@ public class UpdateServiceCommandHandler : IRequestHandler<UpdateServiceCommand>
         await _vcvsContext.SaveChangesAsync(cancellationToken);
     }
 
-    private void RemoveServiceExtraDataBasedOnServiceLocation(ref UpdateServiceCommand request, ServiceLocation serviceLocation)
+    private void RemoveServiceExtraDataBasedOnServiceLocation(ref EditServiceCommand request, ServiceLocation serviceLocation)
     {
         switch (serviceLocation)
         {
@@ -233,7 +233,7 @@ public class UpdateServiceCommandHandler : IRequestHandler<UpdateServiceCommand>
     }
     
     private void ValidateInputBasedOnServiceLocation(
-        UpdateServiceCommand request,
+        EditServiceCommand request,
         ServiceLocation serviceLocation,
         Specialist specialist,
         List<TimeReservationModel> exclude)

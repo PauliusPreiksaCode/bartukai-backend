@@ -1,9 +1,6 @@
-using MediatR;
-using portal_backend.Enums;
-
 namespace portal_backend.Models;
 
-public class UpdateServiceRequest
+public class EditServiceRequest
 {
     public int Id { get; set; }
     public string Name { get; set; } = null!;

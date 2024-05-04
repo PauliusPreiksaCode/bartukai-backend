@@ -4,7 +4,7 @@ using portal_backend.Models;
 
 namespace portal_backend.Mediator.Commands;
 
-public class UpdateServiceCommand : IRequest
+public class EditServiceCommand : IRequest
 {
     public int UserId { get; set; }
     public int Id { get; set; }

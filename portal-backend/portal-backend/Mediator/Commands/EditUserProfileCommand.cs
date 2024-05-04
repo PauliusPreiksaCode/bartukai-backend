@@ -3,7 +3,7 @@ using portal_backend.Enums;
 
 namespace portal_backend.Mediator.Commands;
 
-public class EditUserCommand : IRequest
+public class EditUserProfileCommand : IRequest
 {
     public string FirstName { get; set; }
     public string LastName { get; set; }

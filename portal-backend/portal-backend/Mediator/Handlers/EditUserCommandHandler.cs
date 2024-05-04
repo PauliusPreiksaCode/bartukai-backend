@@ -7,7 +7,7 @@ using portal_backend.Services;
 
 namespace portal_backend.Mediator.Handlers;
 
-public class EditUserCommandHandler : IRequestHandler<EditUserCommand>
+public class EditUserCommandHandler : IRequestHandler<EditUserProfileCommand>
 {
     private readonly VcvsContext _vcvsContext;
     private readonly IConfiguration _config;
@@ -21,7 +21,7 @@ public class EditUserCommandHandler : IRequestHandler<EditUserCommand>
         _imageService = imageService;
     }
     
-    public async Task Handle(EditUserCommand request, CancellationToken cancellationToken)
+    public async Task Handle(EditUserProfileCommand request, CancellationToken cancellationToken)
     {
         if (request.AccountType == AccountType.Specialist)
         {
@@ -53,7 +53,7 @@ public class EditUserCommandHandler : IRequestHandler<EditUserCommand>
         await _vcvsContext.SaveChangesAsync(cancellationToken);
     }
 
-    void UpdateUser(User user, EditUserCommand request)
+    void UpdateUser(User user, EditUserProfileCommand request)
     {
         user.FirstName = request.FirstName;
         user.LastName = request.LastName;

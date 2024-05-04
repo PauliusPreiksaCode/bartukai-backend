@@ -28,13 +28,13 @@ public class DeleteEquipmentCommandHandler : IRequestHandler<DeleteEquipmentComm
 
         equipment.IsAvailable = false;
 
-        var orderedTimes = _vcvsContext.FullOrder
+        var reservations = _vcvsContext.FullOrder
             .Include(x => x.Equipment)
             .Where(x => x.DateFrom > DateTime.Now)
             .AsEnumerable()
             .Where(x => (x.Equipment ?? new List<Equipment>()).Any(y => y.Id == equipment.Id));
         
-        if (orderedTimes.IsNullOrEmpty())
+        if (reservations.IsNullOrEmpty())
         {
             DeleteEquipment(equipment);
             await _vcvsContext.SaveChangesAsync(cancellationToken);

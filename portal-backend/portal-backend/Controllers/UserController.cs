@@ -81,7 +81,7 @@ public class UserController : BaseController
     [HttpPost]
     [Authorize]
     [Route("service/list")]
-    public async Task<IActionResult> GetAllServicesList(GetServicesQuery query)
+    public async Task<IActionResult> GetServices(GetServicesQuery query)
     {
         try
         {
@@ -221,7 +221,7 @@ public class UserController : BaseController
     [Authorize]
     [HttpPut]
     [Route("user")]
-    public async Task<IActionResult> EditUser([FromForm] EditUserCommand command)
+    public async Task<IActionResult> EditUserProfile([FromForm] EditUserProfileCommand command)
     {
         try
         {

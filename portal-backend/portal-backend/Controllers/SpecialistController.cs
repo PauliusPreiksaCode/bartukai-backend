@@ -142,7 +142,7 @@ public class SpecialistController : BaseController
     [HttpPut]
     [Authorize]
     [Route("service")]
-    public async Task<IActionResult> UpdateService(UpdateServiceRequest request)
+    public async Task<IActionResult> EditService(EditServiceRequest request)
     {
         try
         {
@@ -153,7 +153,7 @@ public class SpecialistController : BaseController
                 return new ForbidResult();
             }
         
-            await Mediator.Send(new UpdateServiceCommand()
+            await Mediator.Send(new EditServiceCommand()
             {
                 UserId = User.GetUserId(),
                 Id = request.Id,

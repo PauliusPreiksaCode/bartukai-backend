@@ -27,9 +27,9 @@ public class DeleteServiceCommandHandler : IRequestHandler<DeleteServiceCommand,
             throw new Exception("Service doesn't exist");
         }
 
-        var orderedTimes = service.FullOrders.Where(x => x.OrderId != null && x.DateFrom > DateTime.Now).ToList();
+        var reservations = service.FullOrders.Where(x => x.OrderId != null && x.DateFrom > DateTime.Now).ToList();
 
-        if (orderedTimes.IsNullOrEmpty())
+        if (reservations.IsNullOrEmpty())
         {
             DeleteService(service);
             await _vcvsContext.SaveChangesAsync(cancellationToken);

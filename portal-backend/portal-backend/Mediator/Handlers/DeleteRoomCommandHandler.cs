@@ -28,11 +28,11 @@ public class DeleteRoomCommandHandler : IRequestHandler<DeleteRoomCommand, bool>
 
         room.IsAvailable = false;
 
-        var orderedTimes =  _vcvsContext.FullOrder
+        var reservations =  _vcvsContext.FullOrder
             .Where(x => x.DateFrom > DateTime.Now
                         && (x.Room != null ? x.Room.Id : -1) == room.Id).ToList();
 
-        if (orderedTimes.IsNullOrEmpty())
+        if (reservations.IsNullOrEmpty())
         {
             DeleteRoom(room);
             await _vcvsContext.SaveChangesAsync(cancellationToken);
