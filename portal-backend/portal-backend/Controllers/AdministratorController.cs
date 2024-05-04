@@ -300,4 +300,30 @@ public class AdministratorController : BaseController
         }
     }
     
+    [HttpGet]
+    [Authorize]
+    [Route("service/non-approved-list")]
+    public async Task<IActionResult> GetNonApprovedServicesList()
+    {
+        try
+        {
+            var accountType = User.GetAccountType();
+
+            if (!accountType.Equals(AccountType.Admin))
+            {
+                return new ForbidResult();
+            }
+        
+            var result = await Mediator.Send(new GetNonApprovedServicesListQuery());
+
+            return Ok(result);
+        }
+        catch (Exception e)
+        {
+            return e.Message switch
+            {
+                _ => StatusCode(500, "Pabandykite vėliau")
+            };
+        }
+    }
 }
