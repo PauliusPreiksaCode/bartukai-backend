@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using portal_backend.Mediator.Queries;
 using portal_backend.Models;
 
@@ -17,6 +18,7 @@ public class GetEquipmentOccupancyQueryHandler : IRequestHandler<GetEquipmentOcc
         CancellationToken cancellationToken)
     {
         var data = _vcvsContext.FullOrder
+            .Include(y => y.Equipment)
             .Where(y => y.OrderId != null)
             .Where(y => y.Equipment != null && y.Equipment.Any(x => x.Id == request.EquipmentId))
             .Where(y => y.DateTo > DateTime.Now);
