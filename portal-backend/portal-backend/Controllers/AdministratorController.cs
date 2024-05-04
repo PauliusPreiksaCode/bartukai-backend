@@ -326,4 +326,64 @@ public class AdministratorController : BaseController
             };
         }
     }
+    
+    [HttpGet]
+    [Authorize]
+    [Route("room/occupancy/{id}")]
+    public async Task<IActionResult> GetRoomOccupancy(int id)
+    {
+        try
+        {
+            var accountType = User.GetAccountType();
+
+            if (!accountType.Equals(AccountType.Admin))
+            {
+                return new ForbidResult();
+            }
+        
+            var result = await Mediator.Send(new GetRoomOccupancyQuery()
+            {
+                RoomId = id
+            });
+
+            return Ok(result);
+        }
+        catch (Exception e)
+        {
+            return e.Message switch
+            {
+                _ => StatusCode(500, "Pabandykite vėliau")
+            };
+        }
+    }
+    
+    [HttpGet]
+    [Authorize]
+    [Route("equipment/occupancy/{id}")]
+    public async Task<IActionResult> GetEquipmentOccupancy(int id)
+    {
+        try
+        {
+            var accountType = User.GetAccountType();
+
+            if (!accountType.Equals(AccountType.Admin))
+            {
+                return new ForbidResult();
+            }
+        
+            var result = await Mediator.Send(new GetEquipmentOccupancyQuery()
+            {
+                EquipmentId = id
+            });
+
+            return Ok(result);
+        }
+        catch (Exception e)
+        {
+            return e.Message switch
+            {
+                _ => StatusCode(500, "Pabandykite vėliau")
+            };
+        }
+    }
 }
