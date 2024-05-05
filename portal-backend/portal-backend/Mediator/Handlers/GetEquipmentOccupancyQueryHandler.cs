@@ -19,9 +19,14 @@ public class GetEquipmentOccupancyQueryHandler : IRequestHandler<GetEquipmentOcc
     {
         var data = _vcvsContext.FullOrder
             .Include(y => y.Equipment)
+            .Include(y => y.Room)
+            .ToList();
+            
+            data = data
             .Where(y => y.OrderId != null)
             .Where(y => y.Equipment != null && y.Equipment.Any(x => x.Id == request.EquipmentId))
-            .Where(y => y.DateTo > DateTime.Now);
+            .Where(y => y.DateTo > DateTime.Now)
+            .ToList();
 
         var result = data
             .Select(y => new TimeReservationModel()
